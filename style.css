@@ -1,0 +1,59 @@
+.html,
+*::before,
+*::after,
+body {
+    box-sizing: border-box;
+    padding: 0;
+    background-color: rgb(104, 128, 70);
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+display: flex;
+border: 10px dashed black;
+height: 70px;
+}
+
+.calculator-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.calculator-container > div {
+    border: thin dashed black;
+    width: 500px;
+    height: 700px;
+}
+
+.calculator-ui {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    grid-auto-columns: 1fr;
+    padding: 10px;
+    
+}
+
+.calculator-log {
+    
+}
+
+.calc-display{
+    
+}
+
+.buttons-container {
+   
+}
+
+.grid-col-span-2 {
+    grid-column: span 2;
+}
+
+.grid_col-span-4 {
+    grid-column: span 4;
+}
