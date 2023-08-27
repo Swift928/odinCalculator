@@ -2,8 +2,8 @@ let firstValue;
 let secondValue;
 const numberRegex = /^[0-9]$/;
 const decimalRegex = /^\.$/;
-let firstA = [];
-let firstB = [];
+let firstA = [0];
+let firstB = [0];
 let operator;
 
 
@@ -16,6 +16,7 @@ let displayValue = parseInt(display.innerHTML)
 let operatorButton = document.querySelectorAll('.operator')
 let equalButton = document.querySelector('.equal')
 let absBtn = document.querySelector('.absolute-btn')
+let pctBtn = document.querySelector('.percent-btn')
 
 
 
@@ -49,7 +50,7 @@ function multiply(...rest) {
 }
 
 function divide(...rest) {
-    if (rest.includes(0)) {
+    if (rest.length === 0 || rest.includes(0)) {
         return 'Error'
     }
     let computed = rest.reduce((accumulator, currentValue) => accumulator / currentValue)
@@ -70,15 +71,40 @@ equalButton.addEventListener('click', () => {
 
     // Update the display with the result
     display.innerHTML = result;
+
+    // Reset the firstA and firstB variables
+    firstA = [0]
+    firstB = [0]
 });
     
+absBtn.addEventListener('click', () => {
+    if (!firstA.length) {
+        firstA.push('-')
+        firstA.push('0')
+        display.innerHTML = firstA.join('')
+    } else if (firstA[0] !== '-'){
+        firstA.unshift('-')
+        display.innerHTML = firstA.join('')
+    } else {
+        firstA.shift()
+        display.innerHTML = firstA.join('')
+    }
+})
+
+pctBtn.addEventListener('click', () => {
+    if (firstA.length > 0) {
+        let currentValue = parseFloat(firstA.join(''));
+        currentValue /= 100;
+        firstA = Array.from(currentValue.toString());
+        display.innerHTML = firstA.join('');
+    }
+});
+
 
 
 operatorButton.forEach(button => {
     button.addEventListener('click', () => {
         operator = button.innerHTML
-        console.log(typeof button.innerHTML)
-        console.log(button)
         let tmp = firstA;
         firstB = tmp;
         firstA = [];
@@ -91,9 +117,8 @@ clearButton.addEventListener('click', () => {
     if (clearButton.innerHTML == 'C') {
         clearButton.innerHTML = 'AC'
     }
-    firstA = []
+    firstA = [0]
     operator = ''
-
 })
 
 numButtons.forEach(button => {
@@ -120,7 +145,7 @@ numButtons.forEach(button => {
         //     console.log(firstA)
         //     // display.innerHTML = firstA.join('')
         // }
-})
+    })
 })
 
 
@@ -134,22 +159,6 @@ decimalButton.addEventListener('click', () => {
         } else if (firstA.length > 0 && !firstA.includes('.')) { 
             firstA.push('.')
             display.innerHTML = firstA.join('')
-            console.log(display.innerHTML)
         } else {return}
     }
-})
-
-absBtn.addEventListener('click', () => {
-    if (!firstA.length) {
-        firstA.push('-')
-        firstA.push('0')
-        display.innerHTML = firstA.join('')
-    } else if (firstA[0] !== '-'){
-        firstA.unshift('-')
-        display.innerHTML = firstA.join('')
-    } else {
-        firstA.shift()
-        display.innerHTML = firstA.join('')
-    }
-    
 })
