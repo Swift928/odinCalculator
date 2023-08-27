@@ -46,13 +46,14 @@ const display =  document.querySelector('.calc-display')
 const numButtons = calculatorUi.querySelectorAll('.number')
 const decimalButton = calculatorUi.querySelector('.decimal')
 
+let calcButtons = calculatorUi.querySelectorAll('.calc-button')
+
 const numberRegex = /^[0-9]$/;
 const decimalRegex = /^\.$/;
 
 const clearButton = document.querySelector('.ac-button')
 
 let displayValue = parseInt(display.innerHTML)
-
 
 
 clearButton.addEventListener('click', () => {
@@ -64,31 +65,39 @@ clearButton.addEventListener('click', () => {
     firstA = []
 })
 
-
 let firstA = [];
-
-let result = firstA ? 'its true' : 'its not true';
-console.log(result)
 
 
 numButtons.forEach(button => {
     button.addEventListener('click', () => {
-    const numValue = parseInt(button.innerHTML)
-    console.log(typeof numValue)
+    // const numValue = parseInt(button.innerHTML)
+    // console.log(typeof numValue)
+    let testB = button.innerHTML;
     
-        if (numberRegex.test(button.innerHTML) || decimalRegex.test(button.innerHTML)) {
+        if (numberRegex.test(testB)) {
         clearButton.innerHTML = 'C'
-        firstA.push(numValue)
-        display.innerHTML = parseInt(firstA.join(''))
-        // console.log(typeof numValue)
-        }        
+        }
+
+        if (firstA.includes('.')) {
+        firstA.push(testB)
+        display.innerHTML = parseFloat(firstA.join('')).toFixed(firstA.slice(firstA.indexOf('.') + 1).length);
+        } else {
+            firstA.push(testB)
+            display.innerHTML = parseInt(firstA.join(''))
+        }
 })
 })
 
 decimalButton.addEventListener('click', () => {
+
     if (!firstA.length) {
         clearButton.innerHTML = 'C'
-        firstA.push(decimalButton)
-    } else { firstA.push('.')}
+        firstA.push('0')
+        firstA.push('.')
+        display.innerHTML = firstA.join('')
+    } else if (firstA.length > 1 && !firstA.includes('.')) { 
+        firstA.push('.')
+        display.innerHTML = parseFloat(firstA.join('')).toFixed(1)
+        console.log(display.innerHTML)
+    } else {return}
 })
-
