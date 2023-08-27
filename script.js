@@ -123,7 +123,7 @@ clearButton.addEventListener('click', () => {
 
 numButtons.forEach(button => {
     button.addEventListener('click', () => {
-
+        console.log(firstA)
         if (firstA.length <= 9 && firstA.includes('.') || firstA.length < 9) {
             let testB = button.innerHTML;
 
@@ -139,6 +139,10 @@ numButtons.forEach(button => {
                 display.innerHTML = parseInt(firstA.join(''))
             }
         } else {return}
+
+        if (firstA[0] == 0) {
+            firstA.shift()
+        }
 
         // if (firstA.length >= 3 && firstA.length % 3 === 0 && !firstA.includes(',')) {
         //     firstA.unshift(',');
