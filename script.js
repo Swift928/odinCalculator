@@ -1,9 +1,31 @@
+let firstValue;
+let secondValue;
+const numberRegex = /^[0-9]$/;
+const decimalRegex = /^\.$/;
+let firstA = [];
+let firstB = [];
+let operator;
+
+
+
+
+const calculatorUi = document.querySelector('.calculator-ui')
+const display =  document.querySelector('.calc-display')
+const numButtons = calculatorUi.querySelectorAll('.number')
+const decimalButton = calculatorUi.querySelector('.decimal')
+const clearButton = document.querySelector('.ac-button')
+let displayValue = parseInt(display.innerHTML)
+let operatorButton = document.querySelectorAll('.operator')
+let equalButton = document.querySelector('.equal')
+
+
+
 function operate(operator, num1, num2, ...rest) {
    
     let black = {
         '+': addition,
         '-': subtraction,
-        '*': multiply,
+        'X': multiply,
         '/': divide
     }
 
@@ -11,7 +33,6 @@ function operate(operator, num1, num2, ...rest) {
         return black[operator](num1, num2, ...rest)
     }
 }
-
 
 
 function addition(...rest) {
@@ -31,30 +52,42 @@ function multiply(...rest) {
 
 function divide(...rest) {
     if (rest.includes(0)) {
-        return 'Not possible to divide by 0.'
+        return 'Error'
     }
     let computed = rest.reduce((accumulator, currentValue) => accumulator / currentValue)
     return computed
 }
 
-let firstValue;
-let secondValue;
-let firstA = [];
-const numberRegex = /^[0-9]$/;
-const decimalRegex = /^\.$/;
-let maxDigits = 9;
-let digitsEntered = firstA.length;
+equalButton.addEventListener('click', () => {
+    
+    equalButton.addEventListener('click', () => {
+        // Convert the arrays to strings and join them
+        let valueA = firstA.join('');
+        let valueB = firstB.join('');
+    
+        // Convert the string values to numbers
+        let numberA = parseFloat(valueA);
+        let numberB = parseFloat(valueB);
+    
+        // Perform the calculation using the 'operate' function
+        let result = operate(operator, numberB, numberA);
+    
+        // Update the display with the result
+        display.innerHTML = result;
+    });
+    
+})
 
-
-
-const calculatorUi = document.querySelector('.calculator-ui')
-const display =  document.querySelector('.calc-display')
-const numButtons = calculatorUi.querySelectorAll('.number')
-const decimalButton = calculatorUi.querySelector('.decimal')
-let calcButtons = calculatorUi.querySelectorAll('.calc-button')
-const clearButton = document.querySelector('.ac-button')
-let displayValue = parseInt(display.innerHTML)
-
+operatorButton.forEach(button => {
+    button.addEventListener('click', () => {
+        operator = button.innerHTML
+        console.log(typeof button.innerHTML)
+        console.log(button)
+        let tmp = firstA;
+        firstB = tmp;
+        firstA = [];
+    })
+})
 
 clearButton.addEventListener('click', () => {
     display.innerHTML = displayValue
@@ -63,14 +96,16 @@ clearButton.addEventListener('click', () => {
         clearButton.innerHTML = 'AC'
     }
     firstA = []
+    operator = ''
+
 })
 
 numButtons.forEach(button => {
     button.addEventListener('click', () => {
+
         if (firstA.length <= 9 && firstA.includes('.') || firstA.length < 9) {
             let testB = button.innerHTML;
-            console.log(firstA.length)
-        
+
             if (numberRegex.test(testB)) {
             clearButton.innerHTML = 'C'
             }
@@ -78,13 +113,17 @@ numButtons.forEach(button => {
             if (firstA.includes('.')) {
             firstA.push(testB)
             display.innerHTML = parseFloat(firstA.join('')).toFixed(firstA.slice(firstA.indexOf('.') + 1).length);
-            console.log(digitsEntered)
             } else {
                 firstA.push(testB)
                 display.innerHTML = parseInt(firstA.join(''))
-                console.log(digitsEntered)
             }
         } else {return}
+
+        // if (firstA.length >= 3 && firstA.length % 3 === 0 && !firstA.includes(',')) {
+        //     firstA.unshift(',');
+        //     console.log(firstA)
+        //     // display.innerHTML = firstA.join('')
+        // }
 })
 })
 
@@ -96,7 +135,7 @@ decimalButton.addEventListener('click', () => {
             firstA.push('0')
             firstA.push('.')
             display.innerHTML = firstA.join('')
-        } else if (firstA.length > 1 && !firstA.includes('.')) { 
+        } else if (firstA.length > 0 && !firstA.includes('.')) { 
             firstA.push('.')
             display.innerHTML = firstA.join('')
             console.log(display.innerHTML)
