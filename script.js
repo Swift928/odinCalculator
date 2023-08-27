@@ -7,8 +7,6 @@ let firstB = [];
 let operator;
 
 
-
-
 const calculatorUi = document.querySelector('.calculator-ui')
 const display =  document.querySelector('.calc-display')
 const numButtons = calculatorUi.querySelectorAll('.number')
@@ -17,6 +15,7 @@ const clearButton = document.querySelector('.ac-button')
 let displayValue = parseInt(display.innerHTML)
 let operatorButton = document.querySelectorAll('.operator')
 let equalButton = document.querySelector('.equal')
+let absBtn = document.querySelector('.absolute-btn')
 
 
 
@@ -33,7 +32,6 @@ function operate(operator, num1, num2, ...rest) {
         return black[operator](num1, num2, ...rest)
     }
 }
-
 
 function addition(...rest) {
     let computed = rest.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
@@ -59,24 +57,22 @@ function divide(...rest) {
 }
 
 equalButton.addEventListener('click', () => {
+    // Convert the arrays to strings and join them
+    let valueA = firstA.join('');
+    let valueB = firstB.join('');
+
+    // Convert the string values to numbers
+    let numberA = parseFloat(valueA);
+    let numberB = parseFloat(valueB);
+
+    // Perform the calculation using the 'operate' function
+    let result = operate(operator, numberB, numberA);
+
+    // Update the display with the result
+    display.innerHTML = result;
+});
     
-    equalButton.addEventListener('click', () => {
-        // Convert the arrays to strings and join them
-        let valueA = firstA.join('');
-        let valueB = firstB.join('');
-    
-        // Convert the string values to numbers
-        let numberA = parseFloat(valueA);
-        let numberB = parseFloat(valueB);
-    
-        // Perform the calculation using the 'operate' function
-        let result = operate(operator, numberB, numberA);
-    
-        // Update the display with the result
-        display.innerHTML = result;
-    });
-    
-})
+
 
 operatorButton.forEach(button => {
     button.addEventListener('click', () => {
@@ -141,4 +137,19 @@ decimalButton.addEventListener('click', () => {
             console.log(display.innerHTML)
         } else {return}
     }
+})
+
+absBtn.addEventListener('click', () => {
+    if (!firstA.length) {
+        firstA.push('-')
+        firstA.push('0')
+        display.innerHTML = firstA.join('')
+    } else if (firstA[0] !== '-'){
+        firstA.unshift('-')
+        display.innerHTML = firstA.join('')
+    } else {
+        firstA.shift()
+        display.innerHTML = firstA.join('')
+    }
+    
 })
