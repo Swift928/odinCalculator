@@ -1,5 +1,3 @@
-
-
 let secondValue = null;
 const numberRegex = /^[0-9]$/;
 const decimalRegex = /^\.$/;
@@ -96,18 +94,18 @@ equalButton.addEventListener('click', () => {
         if (firstA.length !== 0) {
             secondValue = parseFloat(firstA.join(''))
             result = operate(operator, result, secondValue);
-            display.innerHTML = result.toLocaleString()
+            display.innerHTML = result.toNumber().toLocaleString()
             firstA = []
         } else {
             result = operate(operator, result, secondValue);
-            display.innerHTML = result.toLocaleString()
+            display.innerHTML = result.toNumber().toLocaleString()
             firstA = []
         }
         
     } else {
         secondValue = parseFloat(firstA.join(''));
         result = operate(operator, firstB, secondValue);
-        display.innerHTML = result
+        display.innerHTML = result.toNumber().toLocaleString()
         // let newResult = (Math.round(result * 100000) / 10000).toLocaleString()
         // if (result.length > 9) {
         //     return display.innerHTML = newResult.toExponential();
