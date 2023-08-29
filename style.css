@@ -51,6 +51,8 @@ height: 70px;
     align-items: end;
     justify-content: end;
     font-size: 2em;
+    white-space: nowrap;
+    overflow: hidden;
 }   
 
 
