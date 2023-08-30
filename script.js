@@ -61,20 +61,20 @@ function operate(operator, ...rest) {
 function addition(...rest) {
     let decimalRest = rest.map(value => new Decimal(value));
     let computed = decimalRest.reduce((accumulator, currentValue) => accumulator.plus(currentValue), new Decimal(0));
-    return computed;
+    return Math.abs(computed.toNumber()) >= 1e9 ? computed.toExponential(2) : computed.toNumber();
 }
 
 function subtraction(...rest) {
     let initial = new Decimal(rest[0]);
     let decimalRest = rest.map(value => new Decimal(value))
     let computed = decimalRest.slice(1).reduce((accumulator, currentValue) => accumulator.minus(currentValue), initial);
-    return computed;
+    return Math.abs(computed.toNumber()) >= 1e9 ? computed.toExponential(2) : computed.toNumber();
 }
 
 function multiply(...rest) {
     let decimalRest = rest.map(value => new Decimal(value))
     let computed = decimalRest.reduce((accumulator, currentValue) => accumulator.times(currentValue), new Decimal(1))
-    return computed
+    return  Math.abs(computed.toNumber()) >= 1e9 ? computed.toExponential(2) : computed.toNumber()
 }
 
 function divide(...rest) {
@@ -83,7 +83,7 @@ function divide(...rest) {
     } else {
         let decimalRest = rest.map(value => new Decimal(value))
         let computed = decimalRest.reduce((accumulator, currentValue) => accumulator.dividedBy(currentValue))
-        return computed
+        return Math.abs(computed.toNumber()) >= 1e9 ? computed.toExponential(2) : computed.toNumber();
     }
 }
 
@@ -94,24 +94,18 @@ equalButton.addEventListener('click', () => {
         if (firstA.length !== 0) {
             secondValue = parseFloat(firstA.join(''))
             result = operate(operator, result, secondValue);
-            display.innerHTML = result.toNumber().toLocaleString()
+            display.innerHTML = result.toLocaleString()
             firstA = []
         } else {
             result = operate(operator, result, secondValue);
-            display.innerHTML = result.toNumber().toLocaleString()
+            display.innerHTML = result.toLocaleString()
             firstA = []
         }
         
     } else {
         secondValue = parseFloat(firstA.join(''));
         result = operate(operator, firstB, secondValue);
-        display.innerHTML = result.toNumber().toLocaleString()
-
-        
-        // let newResult = (Math.round(result * 100000) / 10000).toLocaleString()
-        // if (result.length > 9) {
-        //     return display.innerHTML = newResult.toExponential();
-        // } else { return display.innerHTML = result}
+        display.innerHTML = result.toLocaleString()
         
         firstA = [];
     }
