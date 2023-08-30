@@ -84,7 +84,6 @@ function divide(...rest) {
         let computed = decimalRest.reduce((accumulator, currentValue) => accumulator.dividedBy(currentValue))
         return computed
     }
-    
 }
 
 let result = null;
@@ -106,6 +105,8 @@ equalButton.addEventListener('click', () => {
         secondValue = parseFloat(firstA.join(''));
         result = operate(operator, firstB, secondValue);
         display.innerHTML = result.toNumber().toLocaleString()
+
+        
         // let newResult = (Math.round(result * 100000) / 10000).toLocaleString()
         // if (result.length > 9) {
         //     return display.innerHTML = newResult.toExponential();
