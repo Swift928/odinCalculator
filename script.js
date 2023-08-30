@@ -3,12 +3,12 @@ const numberRegex = /^[0-9]$/;
 const decimalRegex = /^\.$/;
 let firstA = [0];
 let firstB = null;
-let operator;
+let clickedOperator;
 
 const allButtons = document.querySelectorAll('.calc-button')
 const calculatorUi = document.querySelector('.calculator-ui')
 const display =  document.querySelector('.calc-display')
-const numButtons = calculatorUi.querySelectorAll('.number')
+const numberButtons = calculatorUi.querySelectorAll('.number')
 const decimalButton = calculatorUi.querySelector('.decimal')
 const clearButton = document.querySelector('.ac-button')
 let displayValue = parseInt(display.innerHTML)
@@ -19,7 +19,7 @@ let pctBtn = document.querySelector('.percent-btn')
 
 
 
-function operate(operator, ...rest) {
+function operate(clickedOperator, ...rest) {
    
     let black = {
         '+': addition,
@@ -28,35 +28,10 @@ function operate(operator, ...rest) {
         '/': divide
     }
 
-    if (black.hasOwnProperty(operator)) {
-        return black[operator](...rest)
+    if (black.hasOwnProperty(clickedOperator)) {
+        return black[clickedOperator](...rest)
     }
 }
-
-// function addition(...rest) {
-//     let computed = rest.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-//     return computed
-// }
-
-// function subtraction(...rest) {
-//     let initial = rest[0];
-//     let computed = rest.slice(1).reduce((accumulator, currentValue) => accumulator - currentValue, initial);
-//     return computed;
-// }
-
-// function multiply(...rest) {
-//     let computed = rest.reduce((accumulator, currentValue) => accumulator * currentValue, 1)
-//     return computed
-// }
-// function divide(...rest) {
-//     if (rest.length == 0 || rest.some(value => value === 0 || value === null)) {
-//         return 'Error'
-//     } else {
-//         let computed = rest.reduce((accumulator, currentValue) => accumulator / currentValue)
-//         return computed
-//     }
-    
-// }
 
 function addition(...rest) {
     let decimalRest = rest.map(value => new Decimal(value));
@@ -87,29 +62,68 @@ function divide(...rest) {
     }
 }
 
+
+
+
+
 let result = null;
-equalButton.addEventListener('click', () => {
-    if (operator && result) {
+
+
+document.addEventListener('keydown', function(event) {
+    event.preventDefault()
+
+    if (event.key === 'Enter') {        
+        calculate();
+    } else if (/^[0-9]/.test(event.key)) {
+        numbers(event.key)
+    } else if (event.key === '.') {
+        addDecimal()
+    } else if (event.shiftKey && /[+X]/.test(event.key)) {
+        operations(event.key)
+    } else if (event.key === '/') {
+        operations('/')
+    } else if (event.key === '-') {
+        operations('-')
+    }
+})
+
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => numbers(button) )})
+
+equalButton.addEventListener('click', calculate);
+
+decimalButton.addEventListener('click', addDecimal)
+
+operatorButton.forEach(button => {
+    button.addEventListener('click', () => operations(button));
+});
+
+// document.addEventListener('keydown', function(event) {
+//     console.log('Key pressed:', event.key);
+//   });
+
+function calculate() {
+    if (clickedOperator && result) {
         // Perform repeat calculation and update the result variable
         if (firstA.length !== 0) {
             secondValue = parseFloat(firstA.join(''))
-            result = operate(operator, result, secondValue);
+            result = operate(clickedOperator, result, secondValue);
             display.innerHTML = result.toLocaleString()
             firstA = []
         } else {
-            result = operate(operator, result, secondValue);
+            result = operate(clickedOperator, result, secondValue);
             display.innerHTML = result.toLocaleString()
             firstA = []
         }
         
     } else {
         secondValue = parseFloat(firstA.join(''));
-        result = operate(operator, firstB, secondValue);
+        result = operate(clickedOperator, firstB, secondValue);
         display.innerHTML = result.toLocaleString()
         
         firstA = [];
     }
-});
+};
 
 absBtn.addEventListener('click', () => {
     if (!firstA.length) {
@@ -134,22 +148,28 @@ pctBtn.addEventListener('click', () => {
     } else { return }
 });
 
-operatorButton.forEach(button => {
-    button.addEventListener('click', function (event) {
 
-        operatorButton.forEach(btn => btn.classList.remove("active"));
-        this.classList.add("active");
+function operations(input) {
+        // let clickedOperator;
 
-        operator = button.innerHTML;
+        if (typeof input === 'string') {
+            clickedOperator = input
+        } else if (typeof input === 'object' && input instanceof Element) {
+            clickedOperator = input.innerHTML
+        }
+
+        // operatorButton.forEach(btn => btn.classList.remove("active"));
+        // this.classList.add("active");
+
         if (result !== null && secondValue !== null && firstA.length !== 0) {
             secondValue = parseFloat(firstA.join(''))
-            result = operate(operator, result, secondValue)
+            result = operate(clickedOperator, result, secondValue)
             display.innerHTML = result.toLocaleString()
             firstA = []
-        } else if (operator && firstB !== null && firstA.length !== 0) {
+        } else if (clickedOperator && firstB !== null && firstA.length !== 0) {
             // Perform previous calculation and assign result to firstB
             secondValue = parseFloat(firstA.join(''))
-            result = operate(operator, firstB, secondValue);
+            result = operate(clickedOperator, firstB, secondValue);
             display.innerHTML = result.toLocaleString();
             firstA = [];
         } else if (firstA.length !== 0) {
@@ -157,9 +177,9 @@ operatorButton.forEach(button => {
             firstB = parseFloat(firstA.join(''));
             firstA = [];
         } else {return}
-        
-    });
-});
+    }
+    
+
 
 clearButton.addEventListener('click', () => {
     display.innerHTML = displayValue
@@ -171,22 +191,28 @@ clearButton.addEventListener('click', () => {
         result = null;
         firstB = null;
         firstA = [0];
-        operator = '';
+        clickedOperator = '';
         secondValueValue = null;
         operatorButton.forEach(btn => btn.classList.remove('active'))
     }
 })
 
-numButtons.forEach(button => {
-    button.addEventListener('click', () => {
 
+
+function numbers(input) {
         if (firstA.length <= 9 && firstA.includes('.') || firstA.length < 9) {
-            let testB = button.innerHTML;
+            let testB;
+
+            if (typeof input === 'string') {
+                testB = input
+            } else if (typeof input === 'object' && input instanceof Element) {
+                testB = input.innerHTML
+            } else {return}
 
             if (numberRegex.test(testB)) {
             clearButton.innerHTML = 'C'
             }
-        
+            
             if (firstA.includes('.')) {
             firstA.push(testB)
             display.innerHTML = parseFloat(firstA.join('')).toFixed(firstA.slice(firstA.indexOf('.') + 1).length).toLocaleString();
@@ -199,11 +225,10 @@ numButtons.forEach(button => {
         if (firstA[0] == 0) {
             firstA.shift()
         }
-    })
-})
+};
 
 
-decimalButton.addEventListener('click', () => {
+function addDecimal() {
     if (firstA.length < 9) {
         if (!firstA.length) {
             clearButton.innerHTML = 'C'
@@ -215,7 +240,7 @@ decimalButton.addEventListener('click', () => {
             display.innerHTML = firstA.join('')
         } else {return}
     }
-})
+}
 
 
 allButtons.forEach(button => {
