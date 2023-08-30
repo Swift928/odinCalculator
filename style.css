@@ -85,7 +85,7 @@ color: #5d6b21;
     border-radius: 45px;
 }
 
-.operator.active {
+.operator {
     background-color: rgb(102, 230, 5);
     color: #5d6b21;
 }

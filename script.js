@@ -4,6 +4,8 @@ const decimalRegex = /^\.$/;
 let firstA = [0];
 let firstB = null;
 let clickedOperator;
+let result = null;
+
 
 const allButtons = document.querySelectorAll('.calc-button')
 const calculatorUi = document.querySelector('.calculator-ui')
@@ -11,11 +13,11 @@ const display =  document.querySelector('.calc-display')
 const numberButtons = calculatorUi.querySelectorAll('.number')
 const decimalButton = calculatorUi.querySelector('.decimal')
 const clearButton = document.querySelector('.ac-button')
-let displayValue = parseInt(display.innerHTML)
 let operatorButton = document.querySelectorAll('.operator')
 let equalButton = document.querySelector('.equal')
-let absBtn = document.querySelector('.absolute-btn')
-let pctBtn = document.querySelector('.percent-btn')
+let absoluteButton = document.querySelector('.absolute-btn')
+let percentButton = document.querySelector('.percent-btn')
+let displayValue = parseInt(display.innerHTML)
 
 
 
@@ -62,13 +64,6 @@ function divide(...rest) {
     }
 }
 
-
-
-
-
-let result = null;
-
-
 document.addEventListener('keydown', function(event) {
     event.preventDefault()
 
@@ -84,23 +79,28 @@ document.addEventListener('keydown', function(event) {
         operations('/')
     } else if (event.key === '-') {
         operations('-')
+    } else if (event.shiftKey && event.key === '%') {
+        makePercentage()
+    } else if (event.shiftKey && event.key ==='A') {
+        absoluteOperation()
     }
 })
 
+
+
 numberButtons.forEach(button => {
     button.addEventListener('click', () => numbers(button) )})
-
-equalButton.addEventListener('click', calculate);
-
-decimalButton.addEventListener('click', addDecimal)
 
 operatorButton.forEach(button => {
     button.addEventListener('click', () => operations(button));
 });
 
-// document.addEventListener('keydown', function(event) {
-//     console.log('Key pressed:', event.key);
-//   });
+equalButton.addEventListener('click', calculate);
+decimalButton.addEventListener('click', addDecimal)
+percentButton.addEventListener('click', makePercentage)
+absoluteButton.addEventListener('click', absoluteOperation)
+
+
 
 function calculate() {
     if (clickedOperator && result) {
@@ -125,7 +125,7 @@ function calculate() {
     }
 };
 
-absBtn.addEventListener('click', () => {
+function absoluteOperation() {
     if (!firstA.length) {
         firstA.push('-')
         firstA.push('0')
@@ -137,50 +137,43 @@ absBtn.addEventListener('click', () => {
         firstA.shift()
         display.innerHTML = firstA.join('')
     }
-})
+}
 
-pctBtn.addEventListener('click', () => {
+
+function makePercentage() {
     if (firstA.length > 0) {
         let currentValue = parseFloat(firstA.join(''));
         currentValue /= 100;
         firstA = Array.from(currentValue.toString());
         display.innerHTML = firstA.join('');
     } else { return }
-});
-
+};
 
 function operations(input) {
-        // let clickedOperator;
-
-        if (typeof input === 'string') {
-            clickedOperator = input
-        } else if (typeof input === 'object' && input instanceof Element) {
-            clickedOperator = input.innerHTML
-        }
-
-        // operatorButton.forEach(btn => btn.classList.remove("active"));
-        // this.classList.add("active");
-
-        if (result !== null && secondValue !== null && firstA.length !== 0) {
-            secondValue = parseFloat(firstA.join(''))
-            result = operate(clickedOperator, result, secondValue)
-            display.innerHTML = result.toLocaleString()
-            firstA = []
-        } else if (clickedOperator && firstB !== null && firstA.length !== 0) {
-            // Perform previous calculation and assign result to firstB
-            secondValue = parseFloat(firstA.join(''))
-            result = operate(clickedOperator, firstB, secondValue);
-            display.innerHTML = result.toLocaleString();
-            firstA = [];
-        } else if (firstA.length !== 0) {
-            // This will perform the first calculation and store it in firstB
-            firstB = parseFloat(firstA.join(''));
-            firstA = [];
-        } else {return}
+    if (typeof input === 'string') {
+        clickedOperator = input
+    } else if (typeof input === 'object' && input instanceof Element) {
+        clickedOperator = input.innerHTML
     }
+
+    if (result !== null && secondValue !== null && firstA.length !== 0) {
+        secondValue = parseFloat(firstA.join(''))
+        result = operate(clickedOperator, result, secondValue)
+        display.innerHTML = result.toLocaleString()
+        firstA = []
+    } else if (clickedOperator && firstB !== null && firstA.length !== 0) {
+        // Perform previous calculation and assign result to firstB
+        secondValue = parseFloat(firstA.join(''))
+        result = operate(clickedOperator, firstB, secondValue);
+        display.innerHTML = result.toLocaleString();
+        firstA = [];
+    } else if (firstA.length !== 0) {
+        // This will perform the first calculation and store it in firstB
+        firstB = parseFloat(firstA.join(''));
+        firstA = [];
+    } else {return}
+}
     
-
-
 clearButton.addEventListener('click', () => {
     display.innerHTML = displayValue
 
@@ -197,36 +190,33 @@ clearButton.addEventListener('click', () => {
     }
 })
 
-
-
 function numbers(input) {
-        if (firstA.length <= 9 && firstA.includes('.') || firstA.length < 9) {
-            let testB;
+    if (firstA.length <= 9 && firstA.includes('.') || firstA.length < 9) {
+        let testB;
 
-            if (typeof input === 'string') {
-                testB = input
-            } else if (typeof input === 'object' && input instanceof Element) {
-                testB = input.innerHTML
-            } else {return}
-
-            if (numberRegex.test(testB)) {
-            clearButton.innerHTML = 'C'
-            }
-            
-            if (firstA.includes('.')) {
-            firstA.push(testB)
-            display.innerHTML = parseFloat(firstA.join('')).toFixed(firstA.slice(firstA.indexOf('.') + 1).length).toLocaleString();
-            } else {
-                firstA.push(testB)
-                display.innerHTML = parseInt(firstA.join('')).toLocaleString()
-            }
+        if (typeof input === 'string') {
+            testB = input
+        } else if (typeof input === 'object' && input instanceof Element) {
+            testB = input.innerHTML
         } else {return}
 
-        if (firstA[0] == 0) {
-            firstA.shift()
+        if (numberRegex.test(testB)) {
+        clearButton.innerHTML = 'C'
         }
-};
+        
+        if (firstA.includes('.')) {
+        firstA.push(testB)
+        display.innerHTML = parseFloat(firstA.join('')).toFixed(firstA.slice(firstA.indexOf('.') + 1).length).toLocaleString();
+        } else {
+            firstA.push(testB)
+            display.innerHTML = parseInt(firstA.join('')).toLocaleString()
+        }
+    } else {return}
 
+    if (firstA[0] == 0) {
+        firstA.shift()
+    }
+};
 
 function addDecimal() {
     if (firstA.length < 9) {
@@ -243,10 +233,10 @@ function addDecimal() {
 }
 
 
-allButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
-        if (!button.classList.contains('operator') && !button.classList.contains('percent-btn') && !button.classList.contains('absolute-btn') && !button.classList.contains('ac-button')){
-            operatorButton.forEach(btn => btn.classList.remove('active'))
-        }
-    })
-})
+// allButtons.forEach(button => {
+//     button.addEventListener('click', function(event) {
+//         if (!button.classList.contains('operator') && !button.classList.contains('percent-btn') && !button.classList.contains('absolute-btn') && !button.classList.contains('ac-button')){
+//             operatorButton.forEach(btn => btn.classList.remove('active'))
+//         }
+//     })
+// })
