@@ -5,6 +5,7 @@ let firstA = [0];
 let firstB = null;
 let operator;
 
+const allButtons = document.querySelectorAll('.calc-button')
 const calculatorUi = document.querySelector('.calculator-ui')
 const display =  document.querySelector('.calc-display')
 const numButtons = calculatorUi.querySelectorAll('.number')
@@ -140,7 +141,10 @@ pctBtn.addEventListener('click', () => {
 });
 
 operatorButton.forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', function (event) {
+
+        operatorButton.forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
 
         operator = button.innerHTML;
         if (result !== null && secondValue !== null && firstA.length !== 0) {
@@ -175,6 +179,7 @@ clearButton.addEventListener('click', () => {
         firstA = [0];
         operator = '';
         secondValueValue = null;
+        operatorButton.forEach(btn => btn.classList.remove('active'))
     }
 })
 
@@ -200,12 +205,6 @@ numButtons.forEach(button => {
         if (firstA[0] == 0) {
             firstA.shift()
         }
-        console.log(button.html)
-        // if (firstA.length >= 3 && firstA.length % 3 === 0 && !firstA.includes(',')) {
-        //     firstA.unshift(',');
-        //     console.log(firstA)
-        //     // display.innerHTML = firstA.join('')
-        // }
     })
 })
 
@@ -222,4 +221,13 @@ decimalButton.addEventListener('click', () => {
             display.innerHTML = firstA.join('')
         } else {return}
     }
+})
+
+
+allButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        if (!button.classList.contains('operator') && !button.classList.contains('percent-btn') && !button.classList.contains('absolute-btn') && !button.classList.contains('ac-button')){
+            operatorButton.forEach(btn => btn.classList.remove('active'))
+        }
+    })
 })

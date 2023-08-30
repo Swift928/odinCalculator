@@ -4,7 +4,7 @@
 body {
     box-sizing: border-box;
     padding: 0;
-    background-color: rgb(104, 128, 70);
+    background-color: rgb(26, 42, 4);
     gap: 30px;
     display: flex;
     flex-direction: column;
@@ -12,8 +12,12 @@ body {
 
 .header {
 display: flex;
-border: 10px dashed black;
+align-items: center;
+justify-content: center;
+border: 3px dashed rgb(37, 62, 36);
 height: 70px;
+font-size: 65px;
+color: #5d6b21;
 }
 
 .calculator-container {
@@ -24,7 +28,7 @@ height: 70px;
 }
 
 .calculator-ui {
-    background-color: black;
+    background-color: rgb(63, 78, 17);
     display: grid;
     grid-template-columns: repeat(4, 80px);
     padding: 30px 20px 30px 20px;
@@ -34,25 +38,19 @@ height: 70px;
     /* height: 500px; */
 }
 
-.calculator-ui > * {
+.calc-button {
     border: none;
+    color: rgb(102, 230, 5);
+    background-color: #5d6b21;
 }
 
 .calc-button:hover {
-  /* transform: scale(1.05);
+  transform: scale(1.05);
   transition: transform 0.2s ease;
 
-  background-image: linear-gradient(to bottom, #ffcc00, #ff9900);
-  transition: background-image 0.3s ease; */
-
-  animation: pulse 0.5s infinite;
+  background-image: linear-gradient(to bottom, #6a735a, #5eaa43);
+  transition: background-image 0.3s ease;
 }
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
 
 
 /* Makes circles of all elements, except the display and 0 key */
@@ -67,6 +65,7 @@ height: 70px;
 }
 
 .calc-display{
+    background-color: #5d6b21;
     position: relative;
     display: flex;
     align-items: end;
@@ -74,17 +73,22 @@ height: 70px;
     white-space: nowrap;
     overflow: hidden;
     grid-column: span 4;
-    color: white;
+    color: rgb(102, 230, 5);
     padding: 10px 10px;
     font-size: 40px;
     font-family:  sans-serif;
     font-weight: 100;
+    border-radius: 5px;
     /* border-bottom: 90px; */
 }
-
-
 
 .grid-col-span-2 {
     grid-column: span 2;
     border-radius: 45px;
+}
+
+.operator.active {
+    /* background-color: aquamarine; */
+    background-color: rgb(102, 230, 5);
+    color: #5d6b21;
 }
