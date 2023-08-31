@@ -90,30 +90,30 @@ color: #5d6b21;
     color: #5d6b21;
 }
 
-@media (min-width: 750px) or (min-height: 500px) {
+@media (max-width: 750px) or (max-height: 500px) {
     .html,
-*::before,
-*::after,
-body {
+    *::before,
+    *::after,
+    body {
     box-sizing: border-box;
     padding: 0;
     background-color: rgb(26, 42, 4);
     gap: 0;
-    margin: 0;
+    margin:  0;
     display: flex;
     flex-direction: column;
-}
+    align-items: center;
+    justify-content: center;
+    }
     
     .header {        
         text-align: center;
         height: 50px;
     }
+    
+}
 
-    .calculator-container{
-        height: 100%;
-    }}
-
-@media (max-width: 500px) or (max-height: 500px) {
+@media (max-width: 500px) {
     .html,
     *::before,
     *::after,
@@ -132,6 +132,4 @@ body {
         height: 100%;
     }
 
-    .calculator-container{
-        height: 100%;
-    }}
+}
