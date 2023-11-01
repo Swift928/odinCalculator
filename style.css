@@ -110,6 +110,7 @@ body {
         height: 4rem;
         font-size: 2.5rem;
         width: 95%;
+        border: none;
     }
 
     .calculator-ui {
