@@ -8,23 +8,24 @@ body {
     gap: 30px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    /* scroll-behavior: none; */
 }
 
 .header {
-display: flex;
-align-items: center;
-justify-content: center;
-border: 3px dashed rgb(37, 62, 36);
-height: 70px;
-font-size: 65px;
-color: #5d6b21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px dashed rgb(37, 62, 36);
+    height: 70px;
+    font-size: 65px;
+    color: #5d6b21;
 }
 
 .calculator-container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    height: 100%;
 }
 
 .calculator-ui {
@@ -44,38 +45,36 @@ color: #5d6b21;
 }
 
 .calc-button:hover {
-  transform: scale(1.05);
-  transition: transform 0.2s ease;
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
 
-  background-image: linear-gradient(to bottom, #6a735a, #5eaa43);
-  transition: background-image 0.3s ease;
+    background-image: linear-gradient(to bottom, #6a735a, #5eaa43);
+    transition: background-image 0.3s ease;
 }
-
 
 /* Makes circles of all elements, except the display and 0 key */
 .calculator-ui > :not(.grid-col-span-2, .grid_col-span-4) {
-  border-radius: 50%;
-  height: 75px;
-  width: 75px;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
 }
 
 .calculator-ui > :not(.calc-display) {
     font-size: 30px;
 }
 
-.calc-display{
+.calc-display {
     background-color: #5d6b21;
     position: relative;
     display: flex;
     align-items: end;
     justify-content: end;
     white-space: nowrap;
-    overflow: hidden;
     grid-column: span 4;
     color: rgb(102, 230, 5);
     padding: 10px 10px;
     font-size: 40px;
-    font-family:  sans-serif;
+    font-family: sans-serif;
     font-weight: 100;
     border-radius: 5px;
 }
@@ -90,30 +89,7 @@ color: #5d6b21;
     color: #5d6b21;
 }
 
-@media (max-width: 750px) or (max-height: 500px) {
-    .html,
-    *::before,
-    *::after,
-    body {
-    box-sizing: border-box;
-    padding: 0;
-    background-color: rgb(26, 42, 4);
-    gap: 0;
-    margin:  0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    }
-    
-    .header {        
-        text-align: center;
-        height: 50px;
-    }
-    
-}
-
-@media (max-width: 500px) {
+@media (max-width: 768px) {
     .html,
     *::before,
     *::after,
@@ -125,11 +101,25 @@ color: #5d6b21;
         margin: 0;
         display: flex;
         flex-direction: column;
-    }
-    
-    .header {        
-        text-align: center;
-        height: 100%;
+        align-items: center;
+        justify-content: center;
     }
 
+    .header {
+        text-align: center;
+        height: 4rem;
+        font-size: 2.5rem;
+        width: 95%;
+    }
+
+    .calculator-ui {
+        padding: 20px 15px 20px 15px;
+        grid-template-columns: repeat(4, 70px);
+        margin: 20px;
+        grid-gap: 10px;
+    }
+
+    .calculator-ui > :not(.calc-display) {
+        font-size: 25px;
+    }
 }
